@@ -1,0 +1,24 @@
+{
+  "name": "xray-parser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "c8 mocha"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/chai": "^4.3.16",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^22.0.0",
+    "c8": "^10.1.2",
+    "chai": "^5.1.1",
+    "mocha": "^10.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "tsx": "^4.16.2"
+  }
+}
