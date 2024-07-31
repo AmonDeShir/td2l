@@ -1,10 +1,10 @@
 import { Char } from "./char";
-import { LineParser } from "./line-parser";
+import { LineReader } from "./line-reader";
 
 export class Word {
   constructor(
     protected value: string,
-    protected parser: LineParser = new LineParser(value), 
+    protected parser: LineReader = new LineReader(value), 
   ) {}
 
   is(word: string): boolean {
@@ -43,8 +43,8 @@ export class Word {
     return this.parser.read_last_word_letter();
   }
   
-  parse(): LineParser {
-    return new LineParser(this.value);
+  parse(): LineReader {
+    return new LineReader(this.value);
   }
 
   next(): Word {

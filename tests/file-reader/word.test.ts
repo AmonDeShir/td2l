@@ -1,10 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { Char } from "../src/char";
-import { FileParser } from "../src/file-parser";
-import { FILE } from "dns";
-import { LineParser } from "../src/line-parser";
-import { Word } from "../src/word";
+import { LineReader } from "../../src/file-reader/line-reader";
+import { Word } from "../../src/file-reader/word";
 
 describe('word', () => {
     describe('is', () => {
@@ -18,25 +15,25 @@ describe('word', () => {
 
     describe('is_next', () => {
         it('should return true if value of the next word is equal to word parameter', () => {
-            expect(new Word('one', new LineParser('one two')).is_next('two')).to.true;
-            expect(new Word('one', new LineParser('one two')).is_next('test')).to.false;
+            expect(new Word('one', new LineReader('one two')).is_next('two')).to.true;
+            expect(new Word('one', new LineReader('one two')).is_next('test')).to.false;
         })
 
         it('should return false if the current word is the last one', () => {
-            expect(new Word('one', new LineParser('one')).is_next('two')).to.false;
-            expect(new Word('one', new LineParser('one')).is_next('')).to.true;
+            expect(new Word('one', new LineReader('one')).is_next('two')).to.false;
+            expect(new Word('one', new LineReader('one')).is_next('')).to.true;
         })
     })
 
     describe('is_prev', () => {
         it('should return true if value of the prev word is equal to word parameter', () => {
-            expect(new Word('two', new LineParser('one two', 4)).is_prev('one')).to.true;
-            expect(new Word('two', new LineParser('one two', 4)).is_prev('test')).to.false;
+            expect(new Word('two', new LineReader('one two', 4)).is_prev('one')).to.true;
+            expect(new Word('two', new LineReader('one two', 4)).is_prev('test')).to.false;
         })
 
         it('should return false if the current word is the first one', () => {
-            expect(new Word('two', new LineParser('one')).is_prev('two')).to.false;
-            expect(new Word('two', new LineParser('one')).is_prev('')).to.true;
+            expect(new Word('two', new LineReader('one')).is_prev('two')).to.false;
+            expect(new Word('two', new LineReader('one')).is_prev('')).to.true;
         })
     })
 
@@ -95,23 +92,23 @@ describe('word', () => {
 
     describe('parse', () => {
         it('should create a new parser from the word text', () => {
-            expect(new Word('test', new LineParser('word test next', 6)).parse().get_text()).eql('test');
-            expect(new Word('test', new LineParser('word test next', 6)).parse().get_index()).eql(0);
+            expect(new Word('test', new LineReader('word test next', 6)).parse().get_text()).eql('test');
+            expect(new Word('test', new LineReader('word test next', 6)).parse().get_index()).eql(0);
         })
     });
 
     describe('next', () => {
         it(`should return empty char if current word is the last one`, () => {
-            expect(new Word('two', new LineParser('one two', 4)).next().is_empty()).to.be.true;
-            expect(new Word('', new LineParser('')).next().is_empty()).to.be.true;
+            expect(new Word('two', new LineReader('one two', 4)).next().is_empty()).to.be.true;
+            expect(new Word('', new LineReader('')).next().is_empty()).to.be.true;
         })
 
         it(`should return a next word`, () => {
-            expect(new Word('two', new LineParser('one two three', 4)).next().get()).to.eql('three');
+            expect(new Word('two', new LineReader('one two three', 4)).next().get()).to.eql('three');
         })
 
         it(`shouldn't change current word when the next one is changed`, () => {
-            const parser = new LineParser('one two three four', 0);
+            const parser = new LineReader('one two three four', 0);
             const word = new Word('one', parser);
 
             expect(word.get()).is.eq('one')
@@ -125,16 +122,16 @@ describe('word', () => {
 
     describe('prev', () => {
         it(`should return empty char if current word is the first one`, () => {
-            expect(new Word('one', new LineParser('one two', 1)).prev().is_empty()).to.be.true;
-            expect(new Word('', new LineParser('')).prev().is_empty()).to.be.true;
+            expect(new Word('one', new LineReader('one two', 1)).prev().is_empty()).to.be.true;
+            expect(new Word('', new LineReader('')).prev().is_empty()).to.be.true;
         })
 
         it(`should return a previous word`, () => {
-            expect(new Word('two', new LineParser('one two three', 4)).prev().get()).to.eql('one');
+            expect(new Word('two', new LineReader('one two three', 4)).prev().get()).to.eql('one');
         })
 
         it(`shouldn't change current word when the previous one is changed`, () => {
-            const parser = new LineParser('one two three four', 15);
+            const parser = new LineReader('one two three four', 15);
             const word = new Word('four', parser);
 
             expect(word.get()).is.eq('four')

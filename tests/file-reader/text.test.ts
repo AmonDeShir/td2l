@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { FileParser } from "../src/file-parser";
-import { Text } from "../src/text";
+import { Text } from "../../src/file-reader/text";
 
 describe('test', () => {
     describe('is', () => {

@@ -1,7 +1,7 @@
 import { Line } from "./line";
-import { LineParser } from "./line-parser";
+import { LineReader } from "./line-reader";
 
-export class FileParser extends LineParser {
+export class FileReader extends LineReader {
     protected line: string;
 
     constructor(protected text: string, protected index: number = 0) {
@@ -52,7 +52,7 @@ export class FileParser extends LineParser {
         return this.clone().prev_line();
     }
   
-    clone(): FileParser {
-        return new FileParser(this.text, this.index);
+    clone(): FileReader {
+        return new FileReader(this.text, this.index);
     }
   }

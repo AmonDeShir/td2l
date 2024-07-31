@@ -2,7 +2,7 @@ import { Char } from "./char";
 import { Text } from "./text";
 import { Word } from "./word";
 
-export class LineParser {    
+export class LineReader {    
     constructor(
       protected text: string, 
       protected index: number = 0
@@ -332,7 +332,7 @@ export class LineParser {
       return this.index;
     }
 
-    clone(): LineParser {
-      return new LineParser(this.text, this.index);
+    clone(): LineReader {
+      return new LineReader(this.text, this.index);
     }
   }

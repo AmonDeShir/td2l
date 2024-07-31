@@ -1,9 +1,9 @@
-import { LineParser } from "./line-parser";
+import { LineReader } from "./line-reader";
 
 export class Char {
   constructor(
     protected value: string,
-    protected parser: LineParser = new LineParser(value), 
+    protected navigator: LineReader = new LineReader(value), 
   ) {}
 
   is(char: string): boolean {
@@ -99,14 +99,14 @@ export class Char {
   }
 
   index(): number {
-    return this.parser.get_index();
+    return this.navigator.get_index();
   }
 
   next(): Char {
-    return this.parser.read_next_char();
+    return this.navigator.read_next_char();
   }
 
   prev(): Char {
-    return this.parser.read_prev_char();
+    return this.navigator.read_prev_char();
   }
 }

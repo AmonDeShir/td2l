@@ -1,4 +1,4 @@
-import { LineParser } from "./line-parser";
+import { LineReader } from "./line-reader";
 
 export class Text {
     constructor(
@@ -25,7 +25,7 @@ export class Text {
         return this.value;
     }
 
-    parse(): LineParser {
-        return new LineParser(this.value);
+    parse(): LineReader {
+        return new LineReader(this.value);
     }
 }

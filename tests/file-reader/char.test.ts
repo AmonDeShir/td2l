@@ -1,9 +1,8 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { Char } from "../src/char";
-import { FileParser } from "../src/file-parser";
-import { FILE } from "dns";
-import { LineParser } from "../src/line-parser";
+import { Char } from "../../src/file-reader/char";
+import { FileReader } from "../../src/file-reader/file-reader";
+import { LineReader } from "../../src/file-reader/line-reader";
 
 describe('char', () => {
     describe('is', () => {
@@ -31,13 +30,13 @@ describe('char', () => {
 
     describe('is_next', () => {
         it('should check if next character is equal to the char parameter', () => {
-            const char = new Char('T', new FileParser('pTn', 1));
+            const char = new Char('T', new FileReader('pTn', 1));
             expect(char.is_next('n')).to.be.true;
             expect(char.is_next('T')).to.be.false;
         })
 
         it('should return true if next character not exist and the char parameter is an empty string', () => {
-            const char = new Char('n', new FileParser('pTn', 2));
+            const char = new Char('n', new FileReader('pTn', 2));
             expect(char.is_next('')).to.be.true;
             expect(char.is_next('n')).to.be.false;
         })
@@ -45,13 +44,13 @@ describe('char', () => {
 
     describe('is_prev', () => {
         it('should check if previous character is equal to the char parameter', () => {
-            const char = new Char('T', new FileParser('pTn', 1));
+            const char = new Char('T', new FileReader('pTn', 1));
             expect(char.is_prev('p')).to.be.true;
             expect(char.is_prev('T')).to.be.false;
         })
 
         it('should return true if previous character not exist and the char parameter is an empty string', () => {
-            const char = new Char('p', new FileParser('pTn', 0));
+            const char = new Char('p', new FileReader('pTn', 0));
             expect(char.is_prev('')).to.be.true;
             expect(char.is_prev('n')).to.be.false;
         })
@@ -195,8 +194,8 @@ describe('char', () => {
         })
 
         it(`should accept windows style new line`, () => {
-            expect(new Char('\r', new FileParser('\r\n')).is_new_line()).to.be.true;
-            expect(new Char('\r', new FileParser('\rn')).is_new_line()).to.be.false;
+            expect(new Char('\r', new FileReader('\r\n')).is_new_line()).to.be.true;
+            expect(new Char('\r', new FileReader('\rn')).is_new_line()).to.be.false;
         })
     })
 
@@ -307,34 +306,34 @@ describe('char', () => {
 
     describe('index', () => {
         it(`should return 0 if char is the first one`, () => {
-            expect(new Char('a', new LineParser('abc', 0)).index()).to.eql(0);
-            expect(new Char('a', new LineParser('abc', 0)).prev().index()).to.eql(0);
+            expect(new Char('a', new LineReader('abc', 0)).index()).to.eql(0);
+            expect(new Char('a', new LineReader('abc', 0)).prev().index()).to.eql(0);
         })
 
         it(`should return last char id if char is the last one`, () => {
-            expect(new Char('c', new LineParser('abc', 2)).index()).to.eql(2);
-            expect(new Char('c', new LineParser('abc', 2)).index()).to.eql(2);
+            expect(new Char('c', new LineReader('abc', 2)).index()).to.eql(2);
+            expect(new Char('c', new LineReader('abc', 2)).index()).to.eql(2);
         })
 
         it(`should return index of the current char in the word`, () => {
-            expect(new Char('a', new LineParser('abc', 0)).index()).to.be.eq(0);
-            expect(new Char('b', new LineParser('abc', 1)).index()).to.be.eq(1);
-            expect(new Char('c', new LineParser('abc', 2)).index()).to.be.eq(2);
+            expect(new Char('a', new LineReader('abc', 0)).index()).to.be.eq(0);
+            expect(new Char('b', new LineReader('abc', 1)).index()).to.be.eq(1);
+            expect(new Char('c', new LineReader('abc', 2)).index()).to.be.eq(2);
         })
     })
 
     describe('next', () => {
         it(`should return empty char if current char is the last one`, () => {
-            expect(new Char('a', new LineParser('a')).next().is_empty()).to.be.true;
-            expect(new Char('', new LineParser('')).next().is_empty()).to.be.true;
+            expect(new Char('a', new LineReader('a')).next().is_empty()).to.be.true;
+            expect(new Char('', new LineReader('')).next().is_empty()).to.be.true;
         })
 
         it(`should return a next char`, () => {
-            expect(new Char('a', new LineParser('a5cd', 0)).next().get()).to.be.eq('5');
+            expect(new Char('a', new LineReader('a5cd', 0)).next().get()).to.be.eq('5');
         })
 
         it(`shouldn't change current string when the next one is changed`, () => {
-            const parser = new LineParser('a5cd', 0);
+            const parser = new LineReader('a5cd', 0);
             const char = new Char('a', parser);
 
             expect(char.get()).is.eq('a')
@@ -348,16 +347,16 @@ describe('char', () => {
 
     describe('prev', () => {
         it(`should return empty char if current char is the first one`, () => {
-            expect(new Char('a', new LineParser('a')).prev().is_empty()).to.be.true;
-            expect(new Char('', new LineParser('')).prev().is_empty()).to.be.true;
+            expect(new Char('a', new LineReader('a')).prev().is_empty()).to.be.true;
+            expect(new Char('', new LineReader('')).prev().is_empty()).to.be.true;
         })
 
         it(`should return a previous char`, () => {
-            expect(new Char('3', new LineParser('123', 2)).prev().get()).to.be.eq('2');
+            expect(new Char('3', new LineReader('123', 2)).prev().get()).to.be.eq('2');
         })
 
         it(`shouldn't change current string when the previous one is changed`, () => {
-            const parser = new LineParser('a5cd', 3);
+            const parser = new LineReader('a5cd', 3);
             const char = new Char('d', parser);
 
             expect(char.get()).is.eq('d')
